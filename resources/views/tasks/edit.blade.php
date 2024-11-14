@@ -32,8 +32,8 @@
                         <div class="mb-6">
                             <label for="status" class="form-label text-lg font-medium text-gray-700 dark:text-gray-300">Statusi</label>
                             <select class="form-control block w-full px-4 py-2 mt-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200" id="status" name="status" required>
-                                <option value="1" {{ old('status', $task->status) === true ? 'selected' : '' }}>True</option>
-                                <option value="0" {{ old('status', $task->status) === false ? 'selected' : '' }}>False</option>
+                                <option value="1" {{ old('status', $task->status) === true ? 'selected' : '' }}>Perfunduar</option>
+                                <option value="0" {{ old('status', $task->status) === false ? 'selected' : '' }}>Pa Perfunduar</option>
                             </select>
                             @error('status') <small class="text-red-500">{{ $message }}</small> @enderror
                         </div>
