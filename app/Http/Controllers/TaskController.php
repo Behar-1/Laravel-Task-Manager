@@ -25,6 +25,10 @@ class TaskController extends Controller
            $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
+            ], [
+                'title.required' => 'The task title is required.',
+                'title.max' => 'The task title should not exceed 255 characters.',
+                'description.required' => 'The task description is required.',
             ]);
 
             Task::create([
@@ -60,6 +64,10 @@ class TaskController extends Controller
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
+            ], [
+                'title.required' => 'The task title is required.',
+                'title.max' => 'The task title should not exceed 255 characters.',
+                'description.required' => 'The task description is required.',
             ]);
 
             $task->update([
