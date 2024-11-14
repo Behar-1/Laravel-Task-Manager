@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Console\View\Components\Task;
-use Illuminate\Container\Attributes\Auth;
+use App\Models\Tasks;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -21,31 +21,29 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        try {
            $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
+                'priority' => 'required|integer'
             ], [
                 'title.required' => 'The task title is required.',
                 'title.max' => 'The task title should not exceed 255 characters.',
                 'description.required' => 'The task description is required.',
+                'priority.required' => 'The task title is required.'
             ]);
 
-            Task::create([
+            Tasks::create([
                 'user_id' => Auth::id(),
                 'title' => $validated['title'],
                 'description' => $validated['description'],
                 'status' => $request->status ?? false,
-                'priority' => $request->priority,
+                'priority' => $validated['priority'],
             ]);
 
             return redirect()->route('tasks.index')->with('success', 'Task created successfully!');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Something went wrong. Please try again later.');
-        }
     }
 
-    public function edit(Task $task)
+    public function edit(Tasks $task)
     {
         if($task->user_id != Auth::id()){
             return redirect()->route('tasks.index')->with('error', 'You dont have permission to edit this task.');
@@ -54,36 +52,34 @@ class TaskController extends Controller
         return view('tasks.edit', compact('task'));
     }
 
-    public function update(Request $request, Task $task)
+    public function update(Request $request, Tasks $task)
     {
         if($task->user_id != Auth::id()){
             return redirect()->route('tasks.index')->with('error', 'You dont have permission to update this task.');
         }
 
-        try {
             $validated = $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
+                'priority' => 'required|integer'
             ], [
                 'title.required' => 'The task title is required.',
                 'title.max' => 'The task title should not exceed 255 characters.',
                 'description.required' => 'The task description is required.',
+                'priority.required' => 'The task title is required.',
             ]);
 
             $task->update([
                 'title' => $validated['title'],
                 'description' => $validated['description'],
                 'status' => $request->status,
-                'priority' => $request->priority,
+                'priority' => $validated['priority'],
             ]);
 
             return redirect()->route('tasks.index')->with('success', 'Task updated successfully!');
-        } catch (\Throwable $th) {
-            return redirect()->back()->with('error', 'Something went wrong. Please try again later.');
-        }
     }
 
-    public function destroy(Task $task)
+    public function destroy(Tasks $task)
     {
         if($task->user_id != Auth::id()){
             return redirect()->route('tasks.index')->with('error', 'You dont have permission to delete this task.');
